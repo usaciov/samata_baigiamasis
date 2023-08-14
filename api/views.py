@@ -15,7 +15,8 @@ def getData(request):
 @api_view(['GET'])
 def getDataSum(request):
     itemsPrice = Item.objects.aggregate(Sum('price'))
-    return Response('Bendra samata: ' + str(round(itemsPrice['price__sum'], 2)))
+    return Response('Bendra sa'
+                    'mata: ' + str(round(itemsPrice['price__sum'], 2)))
 
 
 @api_view(['POST'])
@@ -31,3 +32,14 @@ def deleteData(request, item_id):
     item = Item.objects.get(pk=item_id)
     item.delete()
     return Response('Pašalintas įrašas su id: ' + item_id)
+
+@api_view(['POST'])
+def updateData(request, item_id):
+    item = Item.objects.get(id=item_id)
+    serializer = ItemSerializer(instance=item, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
+
+
+
